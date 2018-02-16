@@ -7,6 +7,7 @@
 		</style>
 	</head>
 	<body>
+		<script src="../resources/jquery-3.3.1.min.js"></script>
 		<script src="../resources/three.js"></script>
 		<script>
 			var scene = new THREE.Scene();
@@ -16,13 +17,27 @@
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var geometry = new THREE.BoxGeometry( 2, 1, 2 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x2194ce } );
 			var cube = new THREE.Mesh( geometry, material );
+			
+			var cubo2 = new THREE.Mesh(
+				new THREE.BoxGeometry( 2, 1, 2 ), 
+				new THREE.MeshBasicMaterial( { color: 0xce2135 } ) 
+				);
+			
 			scene.add( cube );
-
-			camera.position.z = 5;
-
+			scene.add( cubo2 );
+			
+			var how_high = 1000;
+			var start_position = new THREE.Vector3(0,0,-5000);
+			cube.position.y = Math.sin(cube.position.z / start_position.z * Math.PI) * how_high;
+			
+			var start_position2 = new THREE.Vector3(0,0,-5000);
+			cubo2.position.z = Math.sin(cube.position.z - 10 / start_position.z * Math.PI) * how_high;
+			
+			camera.position.z = 10;
+		
 			var animate = function () {
 				requestAnimationFrame( animate );
 
@@ -31,8 +46,20 @@
 
 				renderer.render(scene, camera);
 			};
-
+			
 			animate();
+			
+
+			// Nao funciona no firefox ** Thalles Batista -- verficar e.originalEvent.detail  para o Mozila
+			$(window).on('DOMMouseScroll mousewheel', function (e) {
+				var position = camera.position.z;
+				camera.position.z = e.originalEvent.wheelDelta < 0 ? position+0.8 : position-0.8;
+		    	//renderer.render(scene, camera);
+		    	return false;
+			});
+			
+			
+			renderer.render(scene, camera);
 		</script>
 	</body>
 </html>
