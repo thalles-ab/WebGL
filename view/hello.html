@@ -10,6 +10,12 @@
 		<script src="../resources/jquery-3.3.1.min.js"></script>
 		<script src="../resources/three.js"></script>
 		<script>
+		
+			var zBase = 0;
+			var diffObjects = 10;
+			var fullScaleScene = diffObjects/2; // escalada default utilizada para colocar os objetos na cena;
+			
+			
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
@@ -31,10 +37,10 @@
 			
 			var how_high = 1000;
 			var start_position = new THREE.Vector3(0,0,-5000);
-			cube.position.y = Math.sin(cube.position.z / start_position.z * Math.PI) * how_high;
+			cube.position.y = Math.sin(zBase / start_position.z * Math.PI) * how_high;
 			
 			var start_position2 = new THREE.Vector3(0,0,-5000);
-			cubo2.position.z = Math.sin(cube.position.z - 10 / start_position.z * Math.PI) * how_high;
+			cubo2.position.z = Math.sin(cube.position.z + diffObjects / start_position.z * Math.PI) * how_high;
 			
 			camera.position.z = 10;
 		
@@ -53,8 +59,12 @@
 			// Nao funciona no firefox ** Thalles Batista -- verficar e.originalEvent.detail  para o Mozila
 			$(window).on('DOMMouseScroll mousewheel', function (e) {
 				var position = camera.position.z;
-				camera.position.z = e.originalEvent.wheelDelta < 0 ? position+0.8 : position-0.8;
-		    	//renderer.render(scene, camera);
+				if(e.originalEvent.wheelDelta < 0){
+					camera.position.z = position+1;
+				}
+				else if(position > zBase-fullScaleScene){
+					camera.position.z = position-1;
+				}
 		    	return false;
 			});
 			
